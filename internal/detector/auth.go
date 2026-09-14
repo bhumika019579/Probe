@@ -1,0 +1,59 @@
+package detector
+
+import (
+	"os"
+	"path/filepath"
+	"strings"
+)
+
+var authLibraries = map[string]string{
+	"golang-jwt":          "Go JWT library",
+	"golang.org/x/oauth2": "Go OAuth2 library",
+	"passport":            "Node.js Passport auth middleware",
+	"next-auth":           "Next.js authentication library",
+	"jsonwebtoken":        "Node.js JWT library",
+	"django.contrib.auth": "Django built-in auth",
+	"spring-security":     "Spring Security (Java)",
+	"pyjwt":               "Python JWT library",
+}
+var dependencyFiles = map[string]bool{
+	"go.mod":           true,
+	"package.json":     true,
+	"requirements.txt": true,
+	"pyproject.toml":   true,
+	"pom.xml":          true,
+}
+
+type authDetector struct{}
+
+func (a authDetector) Name() string {
+	return "authentication detector"
+}
+func (a authDetector) Category() string {
+	return "authentication"
+}
+func (a authDetector) Detect(files []string) []Evidence {
+	var evidence []Evidence
+	for _, path := range files {
+		filename := filepath.Base(path)
+		if !dependencyFiles[filename]{
+			continue
+		}
+		content,err:=os.ReadFile(path)
+		if err!=nil{
+			continue
+		}
+		text:=string(content)
+		for lib,description:=range authLibraries{
+			if strings.Contains(text,lib){
+				evidence=append(evidence, Evidence{
+					File: path,
+					Description: description + "(\""+lib+"\")found in dependencies",
+					Confidence: "high",
+					Category: "authentication",
+				})
+			}
+		}
+	}
+	return evidence
+}

@@ -14,7 +14,7 @@ var skipDirs = map[string]bool{
 }
 
 func Walk(rootPath string) ([]string, error) {
-	var files string
+	var files []string
 	err := filepath.WalkDir(rootPath,func(path string,d fs.DirEntry,err error)error{
 		if err!=nil{
 			return err
