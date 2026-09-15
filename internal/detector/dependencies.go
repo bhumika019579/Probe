@@ -5,6 +5,7 @@ import "path/filepath"
 var lockFiles = map[string]string{
 	"go.sum":            "Go module checksums",
 	"package-lock.json": "npm lockfile",
+	 "package.json":    "Node.js",
 	"yarn.lock":         "Yarn lockfile",
 	"requirements.txt":  "Python pip requirements",
 	"poetry.lock":       "Python Poetry lockfile",
