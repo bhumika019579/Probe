@@ -1,0 +1,48 @@
+controls:
+  - id: CC6.1
+    domain: "Security Controls"
+    name: "Logical Access Security"
+    detector: "auth"
+    description: "Authentication mechanisms are implemented to verify user identity before granting access to application resources."
+
+  - id: CC6.3
+    domain: "Security Controls"
+    name: "Access Authorization and Removal"
+    detector: "access_control"
+    description: "Access to application resources is controlled through authorization mechanisms, roles, permissions, or other access control measures."
+
+  - id: CC6.6
+    domain: "Security Controls"
+    name: "External Threat Protection"
+    detector: "hardening"
+    description: "Application-level security measures such as rate limiting, security headers, and input validation are used to reduce exposure to external threats. Static scanning provides only partial evidence."
+
+  - id: CC6.7
+    domain: "Security Controls"
+    name: "Secrets and Credential Protection"
+    detector: "secrets"
+    description: "API keys, credentials, tokens, environment files, and other sensitive secrets are protected from exposure within the source code and repository."
+
+  - id: CC8.1
+    domain: "Processes"
+    name: "Change Management"
+    detector: "cicd"
+    description: "Changes to software are managed through version control, automated workflows, testing, review, and controlled deployment processes."
+
+  - id: CC7.1
+    domain: "Processes"
+    name: "System Monitoring and Detection"
+    detector: "testing"
+    description: "Testing practices are used to identify defects, security issues, and changes that could affect the application's reliability or security."
+
+  - id: CC7.2
+    domain: "Processes"
+    name: "Incident Detection and Response"
+    detector: "dependencies"
+    description: "Third-party dependencies are monitored for known vulnerabilities and security issues that could affect the application."
+
+  - id: CC2.1
+    domain: "Governance"
+    name: "Information and Documentation"
+    detector: "docs"
+    description: "Relevant security and project documentation is maintained to provide information needed to support internal controls."
