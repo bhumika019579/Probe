@@ -14,6 +14,10 @@ type ControlResult struct {
 	Evidence    []Evidence `json:"evidence"`
 	Description string     `json:"description"`
 }
+type EvidenceItem struct {
+	Evidence
+	EvidenceID string `json:"evidence_id"`
+}
 
 var detectorAlwaysPartial = map[string]bool{
 	"hardening": true,
