@@ -45,11 +45,11 @@ func Build(target string,results []controls.ControlResult)Report{
 			Description: r.Description,
 		})
 		switch r.Status{
-		case "Found":
+		case "found":
 			summary.Found++
 		case "partial":
 			summary.Partial++
-		case "Gap":
+		case "gap":
 			summary.Gap++
 		}
 	    }
