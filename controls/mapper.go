@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"github.com/bhumika019579/probe/internal/detector"
 )
 
 type ControlResult struct {
@@ -11,11 +12,11 @@ type ControlResult struct {
 	Domain      string     `json:"domain"`
 	Name        string     `json:"name"`
 	Status      string     `json:"status"`
-	Evidence    []Evidence `json:"evidence"`
+	Evidence    []detector.Evidence `json:"evidence"`
 	Description string     `json:"description"`
 }
 type EvidenceItem struct {
-	Evidence
+	detector.Evidence
 	EvidenceID string `json:"evidence_id"`
 }
 
@@ -23,7 +24,7 @@ var detectorAlwaysPartial = map[string]bool{
 	"hardening": true,
 }
 
-func MapEvidence(evidenceByDetector map[string][]Evidence, defs []Control) []ControlResult {
+func MapEvidence(evidenceByDetector map[string][]detector.Evidence, defs []Control) []ControlResult {
 	results := make([]ControlResult, 0, len(defs))
 	for _, def := range defs {
 		ev := evidenceByDetector[def.Detector]
@@ -46,7 +47,7 @@ func MapEvidence(evidenceByDetector map[string][]Evidence, defs []Control) []Con
 	}
 	return results
 }
-func EvidenceID(ControlID string, e Evidence) string {
+func EvidenceID(ControlID string, e detector.Evidence) string {
 	raw := fmt.Sprintf("%s|%s|%d|%s", ControlID, e.File, e.Line, e.Description)
 	sum:=sha256.Sum256([]byte(raw))
 	return hex.EncodeToString(sum[:])[:12]

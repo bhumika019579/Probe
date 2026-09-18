@@ -3,17 +3,9 @@ package controls
 import (
 	"fmt"
 	"os"
-
 	"gopkg.in/yaml.v3"
 )
 
-type Evidence struct {
-	File        string `json:"file"`
-	Line        int    `json:"line"`
-	Description string `json:"description"`
-	Confidence  string `json:"confidence"`
-	Category    string `json:"category"`
-}
 type Control struct {
 	ID          string `yaml:"id"`
 	Domain      string `yaml:"domain"`

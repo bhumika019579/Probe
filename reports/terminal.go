@@ -15,7 +15,7 @@ func PrintTerminal(r Report) {
 			fmt.Println("No Evidence Found")
 		}else{
 			for _,e:=range c.Evidence{
-				fmt.Printf("    - %s:%d — %s (confidence: %s)\n", e.File, e.Line, e.Description, e.Confidence)
+				fmt.Printf("    - %s:%d — %s (confidence: %s)\n", e.Evidence.File, e.Evidence.Line, e.Evidence.Description, e.Evidence.Confidence)
 			}
 		}
 		fmt.Println()
