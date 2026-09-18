@@ -12,5 +12,5 @@ type Evidence struct{
 type Detector interface{
 	Name() string
 	Category() string
-	Detect(files []string)Evidence
+	Detect(files []string) []Evidence
 }

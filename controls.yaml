@@ -2,13 +2,13 @@ controls:
   - id: CC6.1
     domain: "Security Controls"
     name: "Logical Access Security"
-    detector: "auth"
+    detector: "authentication"
     description: "Authentication mechanisms are implemented to verify user identity before granting access to application resources."
 
   - id: CC6.3
     domain: "Security Controls"
     name: "Access Authorization and Removal"
-    detector: "access_control"
+    detector: "access control"
     description: "Access to application resources is controlled through authorization mechanisms, roles, permissions, or other access control measures."
 
   - id: CC6.6
