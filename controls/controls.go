@@ -2,9 +2,11 @@ package controls
 
 import (
 	"fmt"
-	"os"
 	"gopkg.in/yaml.v3"
+	_ "embed"
 )
+//go:embed controls.yaml
+var controlsYAML []byte
 
 type Control struct {
 	ID          string `yaml:"id"`
@@ -17,17 +19,14 @@ type controlsFile struct {
 	Controls []Control `yaml:"controls"`
 }
 
-func LoadControls(path string)([]Control,error){
-	data,err:=os.ReadFile(path)
-	if err != nil {
-		return nil, fmt.Errorf("reading controls file %q: %w", path, err)
-	}
+func LoadControls()([]Control,error){
+	data:=controlsYAML
 	var cf controlsFile
 	if err:=yaml.Unmarshal(data,&cf);err!=nil{
-		return nil,fmt.Errorf("parsing controls file %q:%w",path,err)
+		return nil,fmt.Errorf("parsing controls file :%w",err)
 	}
     if len(cf.Controls)==0{
-		return nil, fmt.Errorf("no controls found in %q", path)
+		return nil, fmt.Errorf("no controls found in ", )
 	}
 	seenID:=make(map[string]bool)
 	seenDetector:=make(map[string]bool)

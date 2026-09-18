@@ -34,7 +34,7 @@ func runScan(cmd *cobra.Command,args []string)error{
 		ev:=d.Detect(files)
 		evidenceByDetector[d.Category()]=ev
 	}
-	defs,err:=controls.LoadControls("controls.yaml")
+	defs,err:=controls.LoadControls()
 	if err != nil {
 		return fmt.Errorf("loading controls: %w", err)
 	}
