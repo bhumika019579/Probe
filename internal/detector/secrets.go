@@ -2,6 +2,7 @@ package detector
 
 import (
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -13,6 +14,11 @@ var Keypatterns = []*regexp.Regexp{
 	regexp.MustCompile(`(?i)(api[_-]?key|secret|token)\s*=\s*["'][0-9a-zA-Z]{16,}["']`), 
 }
 type SecretsDetector struct{}
+func isTrackedByGit(path string) bool {
+	cmd := exec.Command("git", "ls-files", "--error-unmatch", filepath.Base(path))
+	cmd.Dir = filepath.Dir(path)
+	return cmd.Run() == nil
+}
 func (s SecretsDetector) Name() string {
 	return "Secrets Management Detector"
 }
@@ -25,12 +31,14 @@ func(s SecretsDetector)Detect(files[]string)[]Evidence{
 	for _,path:=range files{
 		filename:=filepath.Base(path)
 		if filename==".env"{
+			if isTrackedByGit(path){
 			evidence = append(evidence, Evidence{
 				File:        path,
 				Description: ".env file committed to repository — risk of exposed secrets",
 				Confidence:  "high",
 				Category:    "secrets",
 			})
+		}
 			continue
 
 		}
@@ -44,7 +52,7 @@ func(s SecretsDetector)Detect(files[]string)[]Evidence{
             continue
 		}
 		ext:=filepath.Ext(path)
-		if ext==""||strings.Contains(path,".git/"){
+		if ext==""||strings.Contains(filepath.ToSlash(path),".git/"){
 			continue
 		}
 		content,err:=os.ReadFile(path)
