@@ -11,6 +11,11 @@ var skipDirs = map[string]bool{
 	"vendor":       true,
 	"dist":         true,
 	"build":        true,
+	"generated":    true,
+	".next":        true,
+	"coverage":     true,
+	"__pycache__":  true,
+	".venv":        true,
 }
 
 func Walk(rootPath string) ([]string, error) {
