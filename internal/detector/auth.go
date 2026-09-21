@@ -73,12 +73,13 @@ func (a authDetector) Detect(files []string) []Evidence {
 					break
 				}
 			}
+			continue
 		}
 		content,err:=os.ReadFile(path)
 		if err!=nil{
 			continue
 		}
-		text:=string(content)
+		text:=strings.ToLower(string(content))
 		for lib,description:=range authLibraries{
 			if strings.Contains(text,lib){
 				evidence=append(evidence, Evidence{
