@@ -31,15 +31,15 @@ controls:
 
   - id: CC7.1
     domain: "Processes"
-    name: "System Monitoring and Detection"
+    name: "Automated Testing Practices"
     detector: "testing"
-    description: "Testing practices are used to identify defects, security issues, and changes that could affect the application's reliability or security."
+    description: "Automated tests exist in the repository, supporting early detection of defects and regressions that could affect security or reliability. Static scanning shows test presence, not test quality or results."
 
   - id: CC7.2
     domain: "Processes"
-    name: "Incident Detection and Response"
+    name: "Dependency Integrity"
     detector: "dependencies"
-    description: "Third-party dependencies are monitored for known vulnerabilities and security issues that could affect the application."
+    description: "Dependency lockfiles and checksums are present, so third-party package versions are pinned and reproducible. This does not check for known vulnerabilities in those packages."
 
   - id: CC2.1
     domain: "Governance"

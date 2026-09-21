@@ -4,6 +4,7 @@ import "path/filepath"
 
 var docFiles = map[string]string{
 	"SECURITY.md":     "security policy documentation",
+	"README.md":        "contains crucial information about project",
 	"CONTRIBUTING.md": "contribution guidelines",
 	"LICENSE":         "license file",
 	"LICENSE.md":      "license file",
