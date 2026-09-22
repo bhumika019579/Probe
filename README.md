@@ -25,7 +25,7 @@ It scans the repository, detects relevant signals, maps them to SOC 2 controls, 
 
 ## How Probe Works
 
-![Probe Architecture](probe.png)
+![Probe Architecture](probe-work.png)
 
 ## SOC 2 Controls
 
