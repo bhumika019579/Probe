@@ -1,112 +1,180 @@
-Probe
+# Probe
 
-CLI tool that scans a local repository and collects code-level evidence for SOC 2 controls.
+CLI tool that scans a local repository and collects **code-level evidence for SOC 2 controls**.
 
 Probe checks authentication, access control, secrets, CI/CD, testing, dependencies, documentation, and application hardening.
 
-Written in Go
-CLI built with Cobra
-Uses YAML for control configuration and detector mapping
-Supports Go, JavaScript, TypeScript, Python, and Java
-Static repository analysis only — no cloud accounts or network calls at scan time
-Not an auditor and does not certify compliance
-Complements cloud/SaaS evidence tools such as Osto's Evidence Collector
-Why Probe?
+**Written in Go**  
+**CLI built with Cobra**  
+**YAML-based control configuration and detector mapping**  
+**Supports Go, JavaScript, TypeScript, Python, and Java**
+
+Probe performs **static repository analysis only**. It does not access cloud accounts or make network calls during a scan.
+
+Probe is not an auditor and does not certify SOC 2 compliance. It complements cloud/SaaS evidence tools such as Osto's Evidence Collector.
+
+## Why Probe?
 
 Probe is designed to answer a simple question:
 
-"What security-control evidence can be found in this repository?"
+> What security-control evidence can be found in this repository?
 
-It scans the codebase, detects relevant signals, maps them to SOC 2 controls, and produces a terminal or JSON report.
+It scans the repository, detects relevant signals, maps them to SOC 2 controls, and produces a terminal or JSON report.
 
-Probe collects evidence that controls exist; it doesn't find vulnerabilities.
+**Probe collects evidence that controls exist, and it doesn't find vulnerabilities. That keeps the claim honest and puts you next to tools like Osto instead of against scanners like Snyk.**
 
-How Probe Works
+## How Probe Works
 
-The scanning flow is:
 ![Probe Architecture](probe.png)
 
-User → CLI → Repository Walker → Detectors → Evidence → SOC 2 Control Mapping → Terminal / JSON Report
+## SOC 2 Controls
 
-Tech Stack
-Go — core language
-Cobra — CLI commands and argument handling
-YAML — SOC 2 control configuration and mapping
-Go YAML v3 — YAML parsing
-Git — repository-aware checks
-Supported Languages
-Language	Supported
-Go	Yes
-JavaScript	Yes
-TypeScript	Yes
-Python	Yes
-Java	Yes
-Installation
+| Control | What Probe Checks |
+| --- | --- |
+| CC6.1 | Authentication |
+| CC6.3 | Access Control |
+| CC6.6 | External Threat Protection |
+| CC6.7 | Secrets / Credential Protection |
+| CC8.1 | Change Management |
+| CC7.1 | Testing / Monitoring |
+| CC7.2 | Dependencies / Security Issues |
+| CC2.1 | Documentation |
+
+## Install
+
+Requires **Go 1.22+**.
+
+Install Probe:
+
+```bash
 go install github.com/bhumika019579/probe@latest
+```
 
-Requires Go 1.22+.
+On Windows, make sure `%USERPROFILE%\go\bin` is added to your PATH.
 
-On Windows, make sure %USERPROFILE%\go\bin is in your PATH.
+## Build From Source
 
-Build from Source
+```bash
 git clone https://github.com/bhumika019579/probe.git
 cd probe
 go install .
-Commands
-Scan current directory
+```
+
+## Usage
+
+### Scan the current repository
+
+```bash
 probe scan .
-Scan another local project
-probe scan <path>
-Generate JSON report
-probe scan . --json report.json
-View help
-probe --help
-probe scan --help
+```
 
-Probe scans the local directory you provide. It does not clone repositories or access GitHub during a scan.
+### Scan a specific repository
 
-What Each Control Checks
-Control	Name	Checks
-CC6.1	Logical Access Security	Authentication libraries and OAuth/JWT/session patterns
-CC6.3	Access Authorization	Middleware and route-guard patterns
-CC6.6	External Threat Protection	Input validation and application hardening signals
-CC6.7	Secrets Protection	.env tracking and .env.example presence
-CC8.1	Change Management	CI/CD configuration files
-CC7.1	Automated Testing	Test file and naming conventions
-CC7.2	Dependency Integrity	Dependency lockfiles
-CC2.1	Documentation	SECURITY.md, README.md, CONTRIBUTING.md, LICENSE
-Results
+```bash
+probe scan ./my-project
+```
 
-Probe reports each control as:
+### Generate a JSON report
 
-FOUND — recognizable evidence was detected
-PARTIAL — some relevant evidence was detected
-GAP — no recognizable evidence was detected
-Confidence
-High — directly detected or verified evidence
-Medium — stronger code-level signal
-Low — keyword or pattern-based signal
+```bash
+probe scan ./my-project --json report.json
+```
 
-A GAP does not prove that a control is absent. It means Probe could not find recognizable evidence through its static analysis.
+## What Probe Scans
 
-Out of Scope
+Probe looks for code-level signals related to:
 
-Probe does not currently evaluate:
+- Authentication libraries and authentication patterns
+- Access-control and route-guard patterns
+- Application hardening and input-validation libraries
+- Secrets and credential exposure
+- CI/CD configuration
+- Test files and testing signals
+- Dependency lockfiles
+- Security and project documentation
 
-MFA enforcement
-Live IAM / SSO configuration
-AWS / GCP / Azure account settings
-WAF / DDoS runtime protection
-Backup / disaster recovery policies
-Employee offboarding
+Probe scans local repository files and excludes common generated or dependency directories such as:
 
-These require information that cannot reliably be determined from static repository analysis.
+- `node_modules`
+- `vendor`
+- `dist`
+- `build`
+- `.next`
+- `coverage`
+- `.git`
 
-Known Limitations
-Hand-written authentication may not be detected if it does not match known patterns.
-Low-confidence findings are signals, not proof of correct or runtime usage.
-.env checks depend on Git repository information.
-Generated and dependency directories are excluded from scanning.
-Lockfile presence does not mean dependencies are vulnerability-free.
-Probe does not scan for CVEs or execute tests.
-SOC 2 mappings are simplified and do not represent full AICPA TSC compliance.
+## Output
+
+Probe reports each SOC 2 control as:
+
+- **FOUND** — relevant evidence was detected
+- **PARTIAL** — some code-level evidence was detected, but it is not enough to establish the control
+- **GAP** — no matching evidence was detected
+
+Evidence includes the file, location, description, and confidence level where available.
+
+Example:
+
+```text
+[CC6.1] Logical Access Security — FOUND
+
+    - package.json:0
+      Node.js JWT library ("jsonwebtoken") found in dependencies
+      confidence: high
+```
+
+## Confidence Levels
+
+**High** — strong evidence or a directly verifiable repository fact.
+
+**Medium** — stronger code-level evidence, but still not proof of runtime behavior.
+
+**Low** — keyword, pattern, or heuristic signal that requires human verification.
+
+## Tech Stack
+
+- Go — core language
+- Cobra — CLI commands and argument handling
+- YAML — SOC 2 control configuration and detector mapping
+- go-yaml/v3 — YAML parsing
+- Git — repository-aware checks
+- JSON — optional report output
+
+## Supported Languages
+
+Probe can analyze repositories containing:
+
+- Go
+- JavaScript
+- TypeScript
+- Python
+- Java
+
+The Probe CLI itself is written in **Go**.
+
+## Limitations
+
+Probe is a static evidence collector, so it cannot verify runtime or organizational behavior.
+
+It does not currently verify:
+
+- MFA enforcement
+- Live IAM / SSO configuration
+- Cloud account settings
+- WAF or DDoS protection
+- Backup and disaster-recovery policies
+- Employee onboarding/offboarding processes
+- Actual test results or coverage
+- CVEs or vulnerable dependency versions
+
+A detected signal does not automatically mean that a control is fully implemented or compliant.
+
+## Out of Scope
+
+Probe does not perform vulnerability scanning, penetration testing, cloud configuration auditing, or compliance certification.
+
+It is intended to provide developers and security teams with an initial view of **what control-related evidence exists inside a repository**.
+
+---
+
+Built with Go by [Bhumika Chanchlani](https://github.com/bhumika019579)
